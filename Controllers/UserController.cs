@@ -15,7 +15,6 @@ namespace UserNotepad.Controllers
 
         public async Task<IActionResult> ListUsers()
         {
-            await InsertTestUser();
             List<User> users = await _context.Users.ToListAsync();
             ViewData["users"] = users;
             return View(users);
@@ -94,28 +93,6 @@ namespace UserNotepad.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction("ListUsers");
-        }
-
-
-        private async Task InsertTestUser(){
-            UserDTO transfer = new()
-            {
-                Name = "Aaron",
-                Surname = "Stone",
-                BirthDate = DateOnly.FromDateTime(DateTime.Now).ToString(),
-                Gender = "male"
-            };
-            User user = new(transfer);
-            _context.Users.Add(user);
-            ExtraDTO dto = new()
-            {
-                Name = "aaa",
-                Content = "aaa",
-                UserId = 1
-            };
-            ExtraData extraData = new(dto);
-            _context.ExtraDatas.Add(extraData);
-            await _context.SaveChangesAsync();
         }
     }
 }
