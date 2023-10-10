@@ -1,0 +1,89 @@
+@model UserNotepad.DTOs.ExtraDataViewModel
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h1>User with Extra Details</h1>
+<hr />
+<div class="row">
+    <div class="col-md-5">
+        <h5>User Details</h5>
+        <div class="form-group">
+            <label asp-for="User.Name" class="control-label"></label>:
+            @Html.DisplayFor(modelItem => Model.User.Name)
+        </div>
+        <div class="form-group">
+            <label asp-for="User.Surname" class="control-label"></label>:
+            @Html.DisplayFor(modelItem => Model.User.Surname)
+        </div>
+        <div class="form-group">
+            <label asp-for="User.Gender" class="control-label"></label>:
+            @Html.DisplayFor(modelItem => Model.User.Gender)
+        </div>
+        <div class="form-group">
+            <label asp-for="User.BirthDate" class="control-label"></label>:
+            @Convert.ToString(Model.User.BirthDate)
+        </div>
+    </div>
+    <div class="col-md-7">
+        <h5>Extra Details</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExtraDTO.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExtraDTO.Content)
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model.Extras != null){
+                    @foreach (var item in Model.Extras) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </td>
+                            <td>
+                                <a asp-action="EditExtra" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                            </td>
+                            <td>
+                                <form asp-action="DeleteExtra" method="POST">
+                                    <input type="hidden" name="extraId" value="@item.Id"/>
+                                    <input type="hidden" name="id" value="@Model.User.Id"/>
+                                    <input type="submit" value="Delete" class="btn btn-primary btn-danger"/>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <form asp-action="CreateExtra" method="POST">
+                        <input type="hidden" asp-for="ExtraDTO.UserId" value="@Model.User.Id"/>
+                        <td>
+                            <input asp-for="ExtraDTO.Name" class="form-control" />
+                            <span asp-validation-for="ExtraDTO.Name" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="ExtraDTO.Content" class="form-control" />
+                            <span asp-validation-for="ExtraDTO.Content" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </td>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="User" asp-action="ListUsers">Back to List</a>
+</div>
